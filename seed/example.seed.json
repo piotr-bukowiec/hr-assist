@@ -1,0 +1,23 @@
+{
+  "users": [
+    {
+      "name": "Jan",
+      "surname": "Kowalski",
+      "pesel": "10302423683",
+      "email": "jan.kowalski@example.com",
+      "password": "haslo1234"
+    }
+  ],
+  "companies": [
+    {
+      "name": "Spółka ABC sp. z o. o.",
+      "nip": "0491525165",
+      "address": {
+        "street": "Prosta",
+        "houseNumber": 10,
+        "postCode": "05-001",
+        "city": "Radom"
+      }
+    }
+  ]
+}
