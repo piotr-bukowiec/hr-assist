@@ -21,6 +21,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { AttendanceModule } from './modules/attendance/attendance.module';
 import { LeavesModule } from './modules/leaves/leaves.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { SeedModule } from './modules/seed/seed.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ReportsModule } from './modules/reports/reports.module';
     AttendanceModule,
     LeavesModule,
     ReportsModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [
