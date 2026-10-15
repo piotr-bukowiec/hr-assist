@@ -26,7 +26,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(dto.email);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Niepoprawne dane logowania');
     }
 
     const passwordMatches = await this.hashService.compare(
@@ -35,7 +35,7 @@ export class AuthService {
     );
 
     if (!passwordMatches) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Niepoprawne dane logowania');
     }
 
     const payload: JwtPayload = { sub: user.id };
