@@ -52,16 +52,10 @@ export class SeedService implements OnApplicationBootstrap {
     return JSON.parse(readFileSync(this.seedFilePath, 'utf-8')) as SeedData;
   }
 
-  private async checkDatabaseIsEmpty(): Promise<void> {
-    const usersExists: boolean = (await UserEntity.count()) !== 0;
-    const companiesExists: boolean = (await CompanyEntity.count()) !== 0;
-
-    if (usersExists || companiesExists) {
-      this.logger.error(
-        'Baza danych zawiera już dane (użytkownicy lub firmy)! Przerywam seedowanie.',
-      );
-      throw new Error('Database is not empty. Seeding aborted.');
-    }
+  private async isDatabaseEmpty(): Promise<boolean> {
+    return (
+      (await UserEntity.count()) === 0 && (await CompanyEntity.count()) === 0
+    );
   }
 
   private async validateSeedData({
@@ -104,35 +98,49 @@ export class SeedService implements OnApplicationBootstrap {
   }
 
   private async seed(): Promise<void> {
-    if (!this.isSeedFileExists()) {
-      this.logger.log('Brak pliku seed.json. Kontynuacja bez seedowania...');
-      return;
-    }
-    await this.checkDatabaseIsEmpty();
     const seedData: SeedData = this.getParsedSeedData();
 
-    this.logger.log('Rozpoczęcie walidacji danych seed...');
+    this.logger.log('Starting seed data validation...');
     await this.validateSeedData(seedData);
-    this.logger.log('Walidacja zakończona sukcesem.');
-
-    this.logger.log('Zapis danych początkowych do bazy...');
+    this.logger.log('Seed data validation completed successfully!');
 
     const { companies, users } = seedData;
 
-    await Promise.all(
-      users.map(async (user) => await this.usersService.create(user)),
-    );
+    for (const user of users) {
+      await this.usersService.create(user);
+    }
 
-    await Promise.all(
-      companies.map(
-        async (company) => await this.companiesService.create(company),
-      ),
-    );
-
-    this.logger.log('Seedowanie zakończone pomyślnie!');
+    for (const company of companies) {
+      await this.companiesService.create(company);
+    }
   }
 
   async onApplicationBootstrap(): Promise<void> {
-    await this.seed();
+    const isSeedFileExists: boolean = this.isSeedFileExists();
+    const isDatabaseEmpty: boolean = await this.isDatabaseEmpty();
+
+    if (isDatabaseEmpty) {
+      if (!isSeedFileExists) {
+        this.logger.error(
+          'No seed.json file provided and database is empty. Aborting application startup.',
+        );
+        throw new Error(
+          'No seed.json file provided and database is empty. Aborting application startup.',
+        );
+      } else {
+        this.logger.log('Database is empty. Seeding database...');
+        await this.seed();
+        this.logger.log('Seeding completed successfully!');
+      }
+    } else {
+      if (isSeedFileExists) {
+        this.logger.error(
+          'Database is not empty and seed.json file provided. Aborting application startup.',
+        );
+        throw new Error(
+          'Database is not empty and seed.json file provided. Aborting application startup.',
+        );
+      }
+    }
   }
 }
