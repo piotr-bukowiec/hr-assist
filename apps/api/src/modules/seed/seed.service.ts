@@ -6,7 +6,7 @@ import {
   Inject,
   forwardRef,
 } from '@nestjs/common';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, renameSync, unlinkSync } from 'node:fs';
 import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { plainToInstance } from 'class-transformer';
@@ -112,6 +112,23 @@ export class SeedService implements OnApplicationBootstrap {
 
     for (const company of companies) {
       await this.companiesService.create(company);
+    }
+
+    try {
+      const oldSeedFileName: string = `${this.seedFilePath}.old`;
+
+      if (existsSync(oldSeedFileName)) {
+        unlinkSync(oldSeedFileName);
+      }
+
+      renameSync(this.seedFilePath, oldSeedFileName);
+
+      this.logger.log(
+        'Seed file seed.json has been successfully renamed to seed.json.old',
+      );
+    } catch (error) {
+      this.logger.error('Error archiving seed data file:', error);
+      throw new Error('Error archiving seed data file');
     }
   }
 
