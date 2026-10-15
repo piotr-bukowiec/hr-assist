@@ -60,3 +60,14 @@ reports/*
 # Seed configuration (ignorujemy wszystko w folderze seed, oprócz pliku example)
 /seed/*
 !/seed/example.seed.json
+
+# API
+/apps/api/.env
+/apps/api/node_modules
+/apps/api/dist
+/apps/api/reports
+
+# Web
+/apps/web/.env
+/apps/web/node_modules
+/apps/web/.next

@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - '@scarf/scarf'
+  - argon2
+  - unrs-resolver

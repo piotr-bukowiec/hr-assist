@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+# Package manager
+
+This project uses **pnpm**, never npm.
+
+- Run scripts with `pnpm test`, `pnpm install`, `pnpm <script>`
+- Do not use `npm`, `npx`, or `npm run`
+- Use `pnpm exec` or `pnpm dlx` instead of `npx`
