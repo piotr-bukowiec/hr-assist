@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "0.0.1",
-  "description": "",
+  "description": "API for HR Assist application",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
