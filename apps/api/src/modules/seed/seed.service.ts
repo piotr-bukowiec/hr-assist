@@ -40,6 +40,10 @@ export class SeedService implements OnApplicationBootstrap {
     join(cwd(), '../../seed/seed.json'),
   );
 
+  private isSeedFileExists(): boolean {
+    return existsSync(this.seedFilePath);
+  }
+
   private getParsedSeedData(): SeedData {
     if (!existsSync(this.seedFilePath)) {
       throw new Error(`Seed file not found at path: ${this.seedFilePath}`);
@@ -100,6 +104,10 @@ export class SeedService implements OnApplicationBootstrap {
   }
 
   private async seed(): Promise<void> {
+    if (!this.isSeedFileExists()) {
+      this.logger.log('Brak pliku seed.json. Kontynuacja bez seedowania...');
+      return;
+    }
     await this.checkDatabaseIsEmpty();
     const seedData: SeedData = this.getParsedSeedData();
 
