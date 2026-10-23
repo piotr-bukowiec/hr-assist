@@ -26,7 +26,9 @@ export class AbsenceEntity extends BaseEntity implements IAbsenceEntity {
   @Column({ type: 'timestamp with time zone' })
   date: Date;
 
-  @ManyToOne(() => EmployeeEntity, (employee) => employee.absences)
+  @ManyToOne(() => EmployeeEntity, (employee) => employee.absences, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'employeeId' })
   employee: EmployeeEntity;
 }
