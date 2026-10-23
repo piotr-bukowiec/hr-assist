@@ -201,7 +201,11 @@ Create `apps/api/.env`. The backend has no `.env.example`; the full list of vari
 ```dotenv
 NODE_ENV=development
 PORT=3001
-DATABASE_URL=postgres://user:password@localhost:5432/hr_assist
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=hr_assist
 WEB_URL=http://localhost:3000
 JWT_SECRET=change-me
 JWT_EXPIRES_IN=30d
@@ -256,7 +260,11 @@ Every employee belongs to a company, and the web UI only lets you pick one. Crea
 
 | Variable         | Required | Default      | Description                                                                 |
 | ---------------- | :------: | ------------ | --------------------------------------------------------------------------- |
-| `DATABASE_URL`   | yes      | none         | PostgreSQL connection string                                                |
+| `POSTGRES_HOST`  | yes      | none         | PostgreSQL host (`db` inside docker compose, set automatically)             |
+| `POSTGRES_PORT`  | no       | `5432`       | PostgreSQL port                                                             |
+| `POSTGRES_USER`  | yes      | none         | PostgreSQL user (also creates it in the compose `db` container)             |
+| `POSTGRES_PASSWORD` | yes   | none         | PostgreSQL password (also used by the compose `db` container)               |
+| `POSTGRES_DB`    | yes      | none         | Database name (also created by the compose `db` container)                  |
 | `JWT_SECRET`     | yes      | none         | Secret used to sign JWTs                                                    |
 | `HASH_PEPPER`    | yes      | none         | Pepper (argon2 `secret`) for password hashing. Changing it breaks every stored password. |
 | `WEB_URL`        | yes      | none         | Frontend origin allowed by CORS (with credentials)                          |

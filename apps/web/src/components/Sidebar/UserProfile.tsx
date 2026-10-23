@@ -1,11 +1,14 @@
 "use client";
-import { useAuthStore, UserProfile } from "@/store/useAuthStore";
+import {
+  useAuthStore,
+  IUserProfile as IUserProfile,
+} from "@/store/useAuthStore";
 
 const SIDEBAR_FLYOUT_PROFILE_TEXT =
   "text-sm font-semibold text-sidebar-foreground group-data-[state=open]:text-secondary-foreground truncate";
 
 export function UserProfile() {
-  const user = useAuthStore((state) => state.user) as UserProfile | null;
+  const user = useAuthStore((state) => state.user) as IUserProfile | null;
 
   if (!user) return null;
 

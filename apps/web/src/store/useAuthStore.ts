@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { authLog } from "@/utils/debug.utils";
 
-export interface UserProfile {
+export interface IUserProfile {
   id: string;
   email: string;
   name: string;
@@ -12,8 +12,8 @@ export interface UserProfile {
 }
 
 export interface AuthState {
-  user: UserProfile | null;
-  setUser: (user: UserProfile | null) => void;
+  user: IUserProfile | null;
+  setUser: (user: IUserProfile | null) => void;
   isAuthorized: () => boolean;
 }
 

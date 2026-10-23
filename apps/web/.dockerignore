@@ -1,0 +1,11 @@
+node_modules
+.next
+.storybook
+storybook-static
+coverage
+*.tsbuildinfo
+.env.*
+!.env.example
+.git
+Dockerfile
+.dockerignore

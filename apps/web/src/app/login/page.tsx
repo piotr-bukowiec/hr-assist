@@ -1,6 +1,6 @@
 "use client";
 import { ApiService } from "@/services/api.service";
-import { UserProfile, useAuthStore } from "@/store/useAuthStore";
+import { IUserProfile, useAuthStore } from "@/store/useAuthStore";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2, Mail, User } from "lucide-react";
 import { Route } from "next";
@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: loginFn,
-    onSuccess: (user: UserProfile) => {
+    onSuccess: (user: IUserProfile) => {
       setUser(user);
       router.replace("/employees" as Route);
     },

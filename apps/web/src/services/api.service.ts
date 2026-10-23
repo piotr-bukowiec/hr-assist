@@ -1,4 +1,4 @@
-import { UserProfile } from "@/store/useAuthStore";
+import { IUserProfile } from "@/store/useAuthStore";
 import {
   Absences,
   CreateEmployeeDto,
@@ -20,8 +20,8 @@ export interface ReportFile {
 }
 
 export class ApiService {
-  static async login(email: string, password: string): Promise<UserProfile> {
-    const data = await apiRequest<UserProfile>("/api/auth/login", {
+  static async login(email: string, password: string): Promise<IUserProfile> {
+    const data = await apiRequest<IUserProfile>("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
       skipToastOnNetworkError: true,

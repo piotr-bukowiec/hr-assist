@@ -1,0 +1,95 @@
+# Requires apps/api/.env and apps/web/.env (copy them from .env.example first).
+# Compose aborts if apps/api/.env is missing; the web build aborts if apps/web/.env is missing.
+#
+# Only the gateway publishes a port (3000). It serves the Next.js app and forwards /api/* to
+# NestJS on the same origin, so api and db stay private to the Docker networks.
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    # POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB come from the API's .env
+    env_file:
+      - path: ./apps/api/.env
+        required: true
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - backend
+
+  api:
+    build:
+      context: ./apps/api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - path: ./apps/api/.env
+        required: true
+    environment:
+      # The .env host is localhost, which inside the container is the container itself
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      PORT: 3001
+      # CORS origin = the public origin the browser uses (the gateway)
+      WEB_URL: http://localhost:3000
+    volumes:
+      # Whole folder, writable — seed.json is renamed to seed.json.old after seeding
+      - ./seed:/app/seed
+      - api-reports:/app/apps/api/reports
+    # No ports: reachable only through the gateway. "edge" is a regular bridge network,
+    # which also gives the API outbound internet access (NagerAPI).
+    expose:
+      - "3001"
+    networks:
+      - backend
+      - edge
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        # Inlined into the bundle: the browser calls the gateway origin, which proxies /api/*.
+        # Overrides apps/web/.env (localhost:3001 is only for running outside Docker).
+        NEXT_PUBLIC_API_URL: http://localhost:3000
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      # Not 3000: the logout route handler calls NEXT_PUBLIC_API_URL server-side, and if
+      # Next.js itself listened on 3000 inside this container it would call itself in a loop
+      PORT: 8080
+    expose:
+      - "8080"
+    networks:
+      - edge
+
+  gateway:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+      - api
+    volumes:
+      - ./docker/gateway.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "3000:3000"
+    networks:
+      - edge
+
+networks:
+  # Database traffic only; internal = no route to the host or the internet
+  backend:
+    internal: true
+  # Gateway <-> web <-> api, with normal outbound internet access
+  edge:
+
+volumes:
+  db-data:
+  api-reports:
