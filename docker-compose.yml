@@ -40,9 +40,8 @@ services:
       # CORS origin = the public origin the browser uses (the gateway)
       WEB_URL: http://localhost:3000
     volumes:
-      # Whole folder, writable — seed.json is renamed to seed.json.old after seeding
-      - ./seed:/app/seed
-      - api-reports:/app/apps/api/reports
+      - ./seed:/app/seed:ro
+      - api-reports:/app/apps/api/reports:ro
     # No ports: reachable only through the gateway. "edge" is a regular bridge network,
     # which also gives the API outbound internet access (NagerAPI).
     expose:

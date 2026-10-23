@@ -151,11 +151,8 @@ export class SeedService implements OnApplicationBootstrap {
       }
     } else {
       if (isSeedFileExists) {
-        this.logger.error(
-          'Database is not empty and seed.json file provided. Aborting application startup.',
-        );
-        throw new Error(
-          'Database is not empty and seed.json file provided. Aborting application startup.',
+        this.logger.warn(
+          'Database is not empty and seed.json is present. Skipping seed to protect existing data.',
         );
       }
     }
