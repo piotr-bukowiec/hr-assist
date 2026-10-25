@@ -15,34 +15,55 @@ There is no root workspace. Each app has its own `package.json` and `pnpm-lock.y
 
 ---
 
+## Installation
+
+Docker is the only requirement.
+
+```bash
+git clone https://github.com/piotr-bukowiec/hr-assist.git
+cd hr-assist
+
+cp seed/example.seed.json seed/seed.json
+cp .env.example .env
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env
+
+docker compose up --build
+```
+
+`WEB_URL` is the frontend URL, and `NEXT_PUBLIC_API_URL` is the backend URL. The templates are already set for this setup.
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
 ## Table of contents
 
 - [HR Assist](#hr-assist)
-  - [Table of contents](#table-of-contents)
-  - [Features](#features)
-    - [Authentication](#authentication)
-    - [Employees](#employees)
-    - [Attendance calendar](#attendance-calendar)
-    - [Public holidays](#public-holidays)
-    - [Reports](#reports)
-  - [Tech stack: Backend](#tech-stack-backend)
-  - [Tech stack: Frontend](#tech-stack-frontend)
-  - [Repository structure](#repository-structure)
-  - [Installation](#installation)
-  - [Environment variables](#environment-variables)
-    - [Backend: `apps/api/.env`](#backend-appsapienv)
-    - [Frontend: `apps/web/.env` (template: `apps/web/.env.example`)](#frontend-appswebenv-template-appswebenvexample)
-  - [Scripts](#scripts)
-    - [Backend (`apps/api`)](#backend-appsapi)
-    - [Frontend (`apps/web`)](#frontend-appsweb)
-  - [API overview](#api-overview)
-    - [Response envelope](#response-envelope)
-  - [Domain model](#domain-model)
-  - [Attendance statuses](#attendance-statuses)
-  - [Monthly timesheet report](#monthly-timesheet-report)
-  - [Architecture notes](#architecture-notes)
-  - [Testing](#testing)
-  - [Known limitations](#known-limitations)
+- [Installation](#installation)
+- [Features](#features)
+  - [Authentication](#authentication)
+  - [Employees](#employees)
+  - [Attendance calendar](#attendance-calendar)
+  - [Public holidays](#public-holidays)
+  - [Reports](#reports)
+- [Tech stack: Backend](#tech-stack-backend)
+- [Tech stack: Frontend](#tech-stack-frontend)
+- [Repository structure](#repository-structure)
+- [Environment variables](#environment-variables)
+  - [Backend: `apps/api/.env`](#backend-appsapienv)
+  - [Frontend: `apps/web/.env` (template: `apps/web/.env.example`)](#frontend-appswebenv-template-appswebenvexample)
+- [Scripts](#scripts)
+  - [Backend (`apps/api`)](#backend-appsapi)
+  - [Frontend (`apps/web`)](#frontend-appsweb)
+- [API overview](#api-overview)
+  - [Response envelope](#response-envelope)
+- [Domain model](#domain-model)
+- [Attendance statuses](#attendance-statuses)
+- [Monthly timesheet report](#monthly-timesheet-report)
+- [Architecture notes](#architecture-notes)
+- [Testing](#testing)
+- [Known limitations](#known-limitations)
 
 ---
 
@@ -194,28 +215,6 @@ hr-assist/
 │           └── utils/                    # calendar, month, day, form, report helpers
 └── README.md
 ```
-
----
-
-## Installation
-
-Docker is the only requirement.
-
-```bash
-git clone https://github.com/piotr-bukowiec/hr-assist.git
-cd hr-assist
-
-cp seed/example.seed.json seed/seed.json
-cp .env.example .env
-cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env
-
-docker compose up --build
-```
-
-`WEB_URL` is the frontend URL, and `NEXT_PUBLIC_API_URL` is the backend URL. The templates are already set for this setup.
-
-Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
