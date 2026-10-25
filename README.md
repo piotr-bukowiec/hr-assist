@@ -28,12 +28,7 @@ There is no root workspace. Each app has its own `package.json` and `pnpm-lock.y
   - [Tech stack: Backend](#tech-stack-backend)
   - [Tech stack: Frontend](#tech-stack-frontend)
   - [Repository structure](#repository-structure)
-  - [Getting started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [1. Backend](#1-backend)
-    - [2. Frontend](#2-frontend)
-    - [3. First user](#3-first-user)
-    - [4. Companies](#4-companies)
+  - [Installation](#installation)
   - [Environment variables](#environment-variables)
     - [Backend: `apps/api/.env`](#backend-appsapienv)
     - [Frontend: `apps/web/.env` (template: `apps/web/.env.example`)](#frontend-appswebenv-template-appswebenvexample)
@@ -202,82 +197,25 @@ hr-assist/
 
 ---
 
-## Getting started
+## Installation
 
-### Prerequisites
-
-- **Node.js** (a current LTS version)
-- **pnpm** 10 (`corepack enable` or `npm i -g pnpm`)
-- **PostgreSQL** with an empty database for the app
-- Internet access from the API, which fetches public holidays when it starts
-
-### 1. Backend
+Docker is the only requirement.
 
 ```bash
-cd apps/api
-pnpm install
-```
+git clone https://github.com/piotr-bukowiec/hr-assist.git
+cd hr-assist
 
-Create `apps/api/.env`. The backend has no `.env.example`; the full list of variables is in [Environment variables](#environment-variables).
-
-```dotenv
-NODE_ENV=development
-PORT=3001
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=hr_assist
-WEB_URL=http://localhost:3000
-JWT_SECRET=change-me
-JWT_EXPIRES_IN=30d
-HASH_PEPPER=change-me-too
-APP_START_DATE=2026-01-01
-```
-
-Start the API in watch mode:
-
-```bash
-pnpm start:dev
-```
-
-- API: `http://localhost:3001/api`
-- Swagger UI: `http://localhost:3001/docs`
-- OpenAPI JSON: `http://localhost:3001/docs-json`
-
-> **Database schema:** the project has no migrations. TypeORM `synchronize` is turned on only when `NODE_ENV=development`, and it creates or updates the tables automatically. With any other `NODE_ENV`, the schema must already exist.
-
-### 2. Frontend
-
-```bash
-cd apps/web
-pnpm install
+cp seed/example.seed.json seed/seed.json
 cp .env.example .env
-pnpm dev
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env
+
+docker compose up --build
 ```
 
-The dashboard runs at `http://localhost:3000`. The web app runs on port 3000, so the API must use a different port (3001 in the examples).
+`WEB_URL` is the frontend URL, and `NEXT_PUBLIC_API_URL` is the backend URL. The templates are already set for this setup.
 
-### 3. First user
-
-There is no seed script or sign-up page, and the `users` endpoints require a logged-in user. Create the first account directly in the `users` table. The `password` column must hold an **argon2id hash made with the same `HASH_PEPPER`** (passed as argon2's `secret` option), because that is what `HashService.hashText()` produces. After that, more users can be created through `POST /api/users`.
-
-### 4. Companies
-
-Every employee belongs to a company, and the web UI only lets you pick one. Create companies with `POST /api/companies` (Swagger UI works for this):
-
-```json
-{
-  "name": "Example Sp. z o.o.",
-  "nip": "1234567890",
-  "address": {
-    "street": "Prosta",
-    "houseNumber": 1,
-    "postCode": "00-001",
-    "city": "Warszawa"
-  }
-}
-```
+Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
