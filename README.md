@@ -1,5 +1,7 @@
 # HR Assist
 
+**[Demo on YouTube](https://youtu.be/2g_MgQm0g7Q)**
+
 HR Assist is an internal web app for HR staff at Polish companies. It keeps the employee register, tracks each employee's daily attendance and leave, and generates the monthly timesheet (**Miesięczna ewidencja czasu pracy**) as an Excel file ready to print.
 
 The UI and most validation messages are in Polish, and the domain follows Polish labour practice: PESEL and NIP numbers, absence codes such as `UW`, `UŻ`, `CH` and `NN`, 20 or 26 days of annual leave, part-time fractions of a full-time job (etat), and Polish public holidays.
@@ -33,37 +35,38 @@ docker compose up --build
 
 `WEB_URL` is the frontend URL, and `NEXT_PUBLIC_API_URL` is the backend URL. The templates are already set for this setup.
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) (default login: `jan.kowalski@example.com`, password: `haslo1234` - you can change them before installation in `seed/seed.json`)
 
 ---
 
 ## Table of contents
 
 - [HR Assist](#hr-assist)
-- [Installation](#installation)
-- [Features](#features)
-  - [Authentication](#authentication)
-  - [Employees](#employees)
-  - [Attendance calendar](#attendance-calendar)
-  - [Public holidays](#public-holidays)
-  - [Reports](#reports)
-- [Tech stack: Backend](#tech-stack-backend)
-- [Tech stack: Frontend](#tech-stack-frontend)
-- [Repository structure](#repository-structure)
-- [Environment variables](#environment-variables)
-  - [Backend: `apps/api/.env`](#backend-appsapienv)
-  - [Frontend: `apps/web/.env` (template: `apps/web/.env.example`)](#frontend-appswebenv-template-appswebenvexample)
-- [Scripts](#scripts)
-  - [Backend (`apps/api`)](#backend-appsapi)
-  - [Frontend (`apps/web`)](#frontend-appsweb)
-- [API overview](#api-overview)
-  - [Response envelope](#response-envelope)
-- [Domain model](#domain-model)
-- [Attendance statuses](#attendance-statuses)
-- [Monthly timesheet report](#monthly-timesheet-report)
-- [Architecture notes](#architecture-notes)
-- [Testing](#testing)
-- [Known limitations](#known-limitations)
+  - [Installation](#installation)
+  - [Table of contents](#table-of-contents)
+  - [Features](#features)
+    - [Authentication](#authentication)
+    - [Employees](#employees)
+    - [Attendance calendar](#attendance-calendar)
+    - [Public holidays](#public-holidays)
+    - [Reports](#reports)
+  - [Tech stack: Backend](#tech-stack-backend)
+  - [Tech stack: Frontend](#tech-stack-frontend)
+  - [Repository structure](#repository-structure)
+  - [Environment variables](#environment-variables)
+    - [Backend: `apps/api/.env`](#backend-appsapienv)
+    - [Frontend: `apps/web/.env` (template: `apps/web/.env.example`)](#frontend-appswebenv-template-appswebenvexample)
+  - [Scripts](#scripts)
+    - [Backend (`apps/api`)](#backend-appsapi)
+    - [Frontend (`apps/web`)](#frontend-appsweb)
+  - [API overview](#api-overview)
+    - [Response envelope](#response-envelope)
+  - [Domain model](#domain-model)
+  - [Attendance statuses](#attendance-statuses)
+  - [Monthly timesheet report](#monthly-timesheet-report)
+  - [Architecture notes](#architecture-notes)
+  - [Testing](#testing)
+  - [Known limitations](#known-limitations)
 
 ---
 
